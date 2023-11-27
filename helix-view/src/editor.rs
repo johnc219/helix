@@ -1839,9 +1839,11 @@ fn try_restore_indent(doc: &mut Document, view: &mut View) {
             changes
         {
             move_pos + inserted_str.len() == pos
-                && inserted_str.starts_with('\n')
-                && inserted_str.chars().skip(1).all(char_is_whitespace)
                 && pos == line_end_pos // ensure no characters exists after current position
+                && inserted_str
+                    .lines()
+                    .last()
+                    .map_or(false, |l| l.chars().all(char_is_whitespace))
         } else {
             false
         }
